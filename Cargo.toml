@@ -1,0 +1,23 @@
+[package]
+name = "tree-sitter-fga"
+description = "OpenFGA authorization schema grammar for tree-sitter"
+version = "0.0.1"
+license = "MIT"
+readme = "README.md"
+keywords = ["tree-sitter", "parsers", "fga", "openfga"]
+categories = ["parsing", "text-editors", "grammars"]
+repository = "https://github.com/matoous/tree-sitter-fga"
+edition = "2021"
+autoexamples = false
+
+build = "bindings/rust/build.rs"
+include = ["bindings/rust/*", "grammar.js", "queries/*", "src/*"]
+
+[lib]
+path = "bindings/rust/lib.rs"
+
+[dependencies]
+tree-sitter = ">=0.22.2"
+
+[build-dependencies]
+cc = "1.0.87"

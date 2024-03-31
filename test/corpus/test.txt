@@ -1,0 +1,34 @@
+==================
+Basics
+==================
+
+model
+  schema 1.2
+
+type merchant # module: core, file: core.module.fga
+  relations
+    define accountant: [user]
+    define admin: [user] or owner
+
+---
+
+(source_file
+  (model
+    (schema
+      (version)))
+  (type_declaration
+    (identifier)
+    (comment)
+    (relations
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier))))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier))
+          (operator)
+          (identifier))))))

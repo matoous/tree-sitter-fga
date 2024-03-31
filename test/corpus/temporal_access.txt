@@ -1,0 +1,54 @@
+==================
+Temporal access example
+==================
+
+model
+  schema 1.1
+
+type user
+
+type document
+  relations
+    define viewer: [user, user with non_expired_grant]
+
+condition non_expired_grant(current_time: timestamp, grant_time: timestamp, grant_duration: duration) {
+  current_time < grant_time + grant_duration
+}
+
+---
+
+(source_file
+  (model
+    (schema
+      (version)))
+  (type_declaration
+    (identifier))
+  (type_declaration
+    (identifier)
+    (relations
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (identifier)
+            (conditional
+              (identifier)))))))
+  (condition_declaration
+    (identifier)
+    (param
+      (identifier)
+      (param_type))
+    (param
+      (identifier)
+      (param_type))
+    (param
+      (identifier)
+      (param_type))
+    (condition_body
+      (expression
+        (identifier))
+      (expression
+        (identifier)
+        (condition_operator)
+        (identifier)))))

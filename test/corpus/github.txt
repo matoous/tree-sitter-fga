@@ -1,0 +1,156 @@
+==================
+GitHub example
+==================
+
+model
+  schema 1.1
+
+type user
+
+type team
+  relations
+    define member: [user, team#member]
+
+type repo
+  relations
+    define admin: [user, team#member] or repo_admin from owner
+    define maintainer: [user, team#member] or admin
+    define owner: [organization]
+    define reader: [user, team#member] or triager or repo_reader from owner
+    define triager: [user, team#member] or writer
+    define writer: [user, team#member] or maintainer or repo_writer from owner
+
+type organization
+  relations
+    define member: [user] or owner
+    define owner: [user]
+    define repo_admin: [user, organization#member]
+    define repo_reader: [user, organization#member]
+    define repo_writer: [user, organization#member]
+
+---
+
+(source_file
+  (model
+    (schema
+      (version)))
+  (type_declaration
+    (identifier))
+  (type_declaration
+    (identifier)
+    (relations
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier)))))))
+  (type_declaration
+    (identifier)
+    (relations
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier)))
+          (operator)
+          (indirect_relation
+            (identifier)
+            (identifier))))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier)))
+          (operator)
+          (identifier)))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier))))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier)))
+          (operator)
+          (identifier)
+          (operator)
+          (indirect_relation
+            (identifier)
+            (identifier))))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier)))
+          (operator)
+          (identifier)))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier)))
+          (operator)
+          (identifier)
+          (operator)
+          (indirect_relation
+            (identifier)
+            (identifier))))))
+  (type_declaration
+    (identifier)
+    (relations
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier))
+          (operator)
+          (identifier)))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier))))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier)))))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier)))))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)
+            (relation_ref
+              (identifier)
+              (identifier))))))))

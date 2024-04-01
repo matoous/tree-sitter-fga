@@ -19,7 +19,7 @@ relations
   define can_view: viewer and ip_based_access_policy from organization
 
 condition in_company_network(user_ip: ipaddress, cidr: string) {
-user_ip.in_cidr(cidr)
+  user_ip.in_cidr(cidr)
 }
 
 ---
@@ -77,8 +77,9 @@ user_ip.in_cidr(cidr)
       (identifier)
       (param_type))
     (condition_body
-      (expression
-        (fn
+      (call_expression
+        (selector_expression
           (identifier)
-          (identifier)
+          (identifier))
+        (argument_list
           (identifier))))))

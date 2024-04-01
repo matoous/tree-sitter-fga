@@ -1,10 +1,31 @@
 // https://openfga.dev/docs/configuration-language
+const
+  PREC = {
+    primary: 7,
+    unary: 6,
+    multiplicative: 5,
+    additive: 4,
+    comparative: 3,
+    and: 2,
+    or: 1,
+  },
+  types = ['string', 'int', 'map', 'uint', 'list', 'timestamp', 'bool', 'duration', 'double', 'ipaddress'],
+  multiplicative_operators = ['*', '/', '%', '<<', '>>', '&', '&^'],
+  additive_operators = ['+', '-', '|', '^'],
+  comparative_operators = ['==', '!=', '<', '<=', '>', '>='];
+
 module.exports = grammar({
   name: "fga",
 
   extras: $ => [
     $.comment,
     /\s/,
+  ],
+
+  word: $ => $.identifier,
+
+  supertypes: $ => [
+    $._expression,
   ],
 
   rules: {
@@ -47,7 +68,7 @@ module.exports = grammar({
       )
     ),
 
-    operator: $ => choice('or', 'and'),
+    operator: $ => choice('or', 'and', 'but not'),
 
     direct_relationship: $ => seq(
       '[',
@@ -71,54 +92,103 @@ module.exports = grammar({
 
     condition_declaration: $ => seq(
       'condition',
-      $.identifier,
+      field('name', $.identifier),
       '(',
       optional(list($.param, ',')),
       ')',
-      $.condition_body,
+      field('body', $.condition_body),
     ),
 
     param: $ => seq(
       $.identifier,
       ':',
-      $.param_type,
+      $.type_identifier,
     ),
 
-    param_type: $ => choice(
-      'duration',
-      'timestamp',
-      'string',
-      'ipaddress',
-    ),
+    type_identifier: $ => choice(...types),
+
+    _comparative_operator: $ => choice(...comparative_operators),
 
     condition_body: $ => seq(
       '{',
-      choice(
-        $.expression,
-        seq(
-          $.expression,
-          choice('<', '>'),
-          $.expression,
-        ),
-      ),
+      $._expression,
       '}',
     ),
 
-    expression: $ => choice(
-      list($.identifier, $.condition_operator),
-      $.fn,
+    binary_expression: $ => choice(
+      prec.left(
+        PREC.multiplicative,
+        seq(
+          field('left', $._expression),
+          field('operator', choice(...multiplicative_operators)),
+          field('right', $._expression),
+        ),
+      ),
+      prec.left(
+        PREC.additive,
+        seq(
+          field('left', $._expression),
+          field('operator', choice(...additive_operators)),
+          field('right', $._expression),
+        ),
+      ),
+      prec.left(
+        PREC.comparative,
+        seq(
+          field('left', $._expression),
+          field('operator', choice(...comparative_operators)),
+          field('right', $._expression),
+        ),
+      ),
+      prec.left(
+        PREC.and,
+        seq(
+          field('left', $._expression),
+          field('operator', '&&'),
+          field('right', $._expression),
+        ),
+      ),
+      prec.left(
+        PREC.or,
+        seq(
+          field('left', $._expression),
+          field('operator', '||'),
+          field('right', $._expression),
+        ),
+      ),
     ),
 
-    fn: $ => seq(
-      $.identifier,
-      token.immediate('.'),
-      field('method', $.identifier),
+    unary_expression: $ => prec(PREC.unary, seq(
+      field('operator', choice('+', '-', '!')),
+      field('operand', $._expression),
+    )),
+
+    call_expression: $ => prec(PREC.primary, seq(
+        field('function', choice($.selector_expression, $.identifier)),
+        field('arguments', $.argument_list),
+      ),
+    ),
+
+    selector_expression: $ => prec(PREC.primary, seq(
+      field('operand', $.identifier),
+      '.',
+      field('field', $.identifier),
+    )),
+
+    argument_list: $ => seq(
       '(',
-      optional(list($.identifier, ',')),
+      optional(list($._expression, ',')),
       ')',
     ),
 
-    condition_operator: $ => field('operator', choice('+', '-')),
+    _expression: $ => choice(
+      // $.unary_expression,
+      $.binary_expression,
+      $.selector_expression,
+      $.call_expression,
+      $.identifier,
+      // slices?
+    ),
 
     identifier: $ => /[a-zA-Z_]+/,
 

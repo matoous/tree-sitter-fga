@@ -1,2 +1,7 @@
 /src/** linguist-vendored
 /examples/* linguist-vendored
+/bindings/** linguist-generated=true
+
+src/grammar.json -diff
+src/node-types.json -diff
+src/parser.c -diff

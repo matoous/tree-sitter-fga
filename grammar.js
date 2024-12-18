@@ -8,14 +8,14 @@ const
     comparative: 3,
     and: 2,
     or: 1,
-  },
-  types = ['string', 'int', 'map', 'uint', 'list', 'timestamp', 'bool', 'duration', 'double', 'ipaddress'],
-  multiplicative_operators = ['*', '/', '%', '<<', '>>', '&', '&^'],
-  additive_operators = ['+', '-', '|', '^'],
-  comparative_operators = ['==', '!=', '<', '<=', '>', '>='];
+  };
+const types = ['string', 'int', 'map', 'uint', 'list', 'timestamp', 'bool', 'duration', 'double', 'ipaddress'];
+const multiplicative_operators = ['*', '/', '%', '<<', '>>', '&', '&^'];
+const additive_operators = ['+', '-', '|', '^'];
+const comparative_operators = ['==', '!=', '<', '<=', '>', '>='];
 
 module.exports = grammar({
-  name: "fga",
+  name: 'fga',
 
   extras: $ => [
     $.comment,
@@ -36,16 +36,16 @@ module.exports = grammar({
 
     model: $ => seq('model', '\n', $.schema),
 
-    schema: $ => seq ('schema', $.version),
+    schema: $ => seq('schema', $.version),
 
     version: $ => /[0-9]+\.[0-9]+/,
 
-    type_declaration: $ => seq (
+    type_declaration: $ => seq(
       'type', $.identifier, '\n',
       optional($.relations),
     ),
 
-    relations: $ => seq (
+    relations: $ => seq(
       'relations',
       repeat($.definition),
     ),
@@ -63,9 +63,9 @@ module.exports = grammar({
         optional(seq($.direct_relationship, $.operator)),
         list(
           choice($.identifier, $.indirect_relation),
-          $.operator
-        )
-      )
+          $.operator,
+        ),
+      ),
     ),
 
     operator: $ => choice('or', 'and', 'but not'),
@@ -77,7 +77,7 @@ module.exports = grammar({
           choice($.identifier, $.relation_ref, $.all),
           optional($.conditional),
         ),
-        ','
+        ',',
       ),
       ']',
     ),
@@ -87,7 +87,7 @@ module.exports = grammar({
     indirect_relation: $ => seq($.identifier, 'from', $.identifier),
 
     relation_ref: $ => seq($.identifier, token.immediate(prec(1, '#')), $.identifier),
-    
+
     all: $ => seq($.identifier, token.immediate(':*')),
 
     condition_declaration: $ => seq(
@@ -164,9 +164,9 @@ module.exports = grammar({
     )),
 
     call_expression: $ => prec(PREC.primary, seq(
-        field('function', choice($.selector_expression, $.identifier)),
-        field('arguments', $.argument_list),
-      ),
+      field('function', choice($.selector_expression, $.identifier)),
+      field('arguments', $.argument_list),
+    ),
     ),
 
     selector_expression: $ => prec(PREC.primary, seq(
@@ -193,7 +193,7 @@ module.exports = grammar({
     identifier: $ => /[a-zA-Z_]+/,
 
     comment: $ => token(seq('#', /.+/)),
-  }
+  },
 });
 
 /**
@@ -202,8 +202,8 @@ module.exports = grammar({
  * @param {rile} rule
  * @param {separator} rule
  *
- * @return {SeqRule}
- *
+ * @param separator
+ * @returns {SeqRule}
  */
 function list(rule, separator) {
   return seq(rule, optional(repeat(seq(separator, rule))));

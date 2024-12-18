@@ -1,11 +1,11 @@
-prefix=/usr/local
-libdir=${prefix}/lib
-includedir=${prefix}/include
+prefix=@PREFIX@
+libdir=@LIBDIR@
+includedir=@INCLUDEDIR@
 
 Name: tree-sitter-fga
 Description: Fga grammar for tree-sitter
-URL: 
-Version: 0.0.1
-Requires: 
-Libs: -L${libdir}  -ltree-sitter-fga
+URL: @URL@
+Version: @VERSION@
+Requires: @REQUIRES@
+Libs: -L${libdir} @ADDITIONAL_LIBS@ -ltree-sitter-fga
 Cflags: -I${includedir}

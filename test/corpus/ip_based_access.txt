@@ -72,10 +72,10 @@ condition in_company_network(user_ip: ipaddress, cidr: string) {
     (identifier)
     (param
       (identifier)
-      (param_type))
+      (type_identifier))
     (param
       (identifier)
-      (param_type))
+      (type_identifier))
     (condition_body
       (call_expression
         (selector_expression

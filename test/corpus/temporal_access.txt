@@ -38,13 +38,13 @@ condition non_expired_grant(current_time: timestamp, grant_time: timestamp, gran
     (identifier)
     (param
       (identifier)
-      (param_type))
+      (type_identifier))
     (param
       (identifier)
-      (param_type))
+      (type_identifier))
     (param
       (identifier)
-      (param_type))
+      (type_identifier))
     (condition_body
       (binary_expression
         (identifier)

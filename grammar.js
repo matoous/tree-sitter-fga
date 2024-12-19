@@ -29,18 +29,30 @@ module.exports = grammar({
   ],
 
   rules: {
-    source_file: $ => seq(
-      $.model,
+    source_file: $ => choice($._project_file, $._module_file),
+
+    _project_file: $ => seq(alias($.quoted_schema, $.schema), $.contents),
+    _module_file: $ => seq(
+      choice($.model, $.module),
       repeat(choice($.type_declaration, $.condition_declaration)),
     ),
 
-    model: $ => seq('model', '\n', $.schema),
+    quoted_schema: $ => seq('schema:', $._quoted_version),
+
+    contents: $ => seq('contents:', repeat(seq('-', $.file))),
+
+    file: $ => /.+\..+/,
 
     schema: $ => seq('schema', $.version),
 
     version: $ => /[0-9]+\.[0-9]+/,
+    _quoted_version: $ => seq('\'', $.version, '\''),
+
+    model: $ => seq('model', '\n', $.schema),
+    module: $ => seq('module', $.identifier),
 
     type_declaration: $ => seq(
+      optional('extend'),
       'type', $.identifier, '\n',
       optional($.relations),
     ),

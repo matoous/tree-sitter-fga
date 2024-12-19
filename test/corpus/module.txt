@@ -1,0 +1,22 @@
+==================
+Module
+==================
+
+module test
+
+extend type user
+  relations
+    define example: test
+
+---
+
+(source_file
+  (module
+    (identifier))
+  (type_declaration
+    (identifier)
+    (relations
+      (definition
+        (identifier)
+        (relation_def
+          (identifier))))))

@@ -4,11 +4,51 @@
   "word": "identifier",
   "rules": {
     "source_file": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "model"
+          "name": "_project_file"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_module_file"
+        }
+      ]
+    },
+    "_project_file": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "quoted_schema"
+          },
+          "named": true,
+          "value": "schema"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "contents"
+        }
+      ]
+    },
+    "_module_file": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "model"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "module"
+            }
+          ]
         },
         {
           "type": "REPEAT",
@@ -25,6 +65,82 @@
               }
             ]
           }
+        }
+      ]
+    },
+    "quoted_schema": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "schema:"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_quoted_version"
+        }
+      ]
+    },
+    "contents": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "contents:"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "-"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "file"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "file": {
+      "type": "PATTERN",
+      "value": ".+\\..+"
+    },
+    "schema": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "schema"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "version"
+        }
+      ]
+    },
+    "version": {
+      "type": "PATTERN",
+      "value": "[0-9]+\\.[0-9]+"
+    },
+    "_quoted_version": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "'"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "version"
+        },
+        {
+          "type": "STRING",
+          "value": "'"
         }
       ]
     },
@@ -45,26 +161,34 @@
         }
       ]
     },
-    "schema": {
+    "module": {
       "type": "SEQ",
       "members": [
         {
           "type": "STRING",
-          "value": "schema"
+          "value": "module"
         },
         {
           "type": "SYMBOL",
-          "name": "version"
+          "name": "identifier"
         }
       ]
-    },
-    "version": {
-      "type": "PATTERN",
-      "value": "[0-9]+\\.[0-9]+"
     },
     "type_declaration": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "extend"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
         {
           "type": "STRING",
           "value": "type"

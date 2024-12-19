@@ -256,6 +256,21 @@
     }
   },
   {
+    "type": "contents",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "file",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "definition",
     "named": true,
     "fields": {
@@ -333,6 +348,21 @@
       "types": [
         {
           "type": "schema",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "module",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -474,7 +504,19 @@
           "named": true
         },
         {
+          "type": "contents",
+          "named": true
+        },
+        {
           "type": "model",
+          "named": true
+        },
+        {
+          "type": "module",
+          "named": true
+        },
+        {
+          "type": "schema",
           "named": true
         },
         {
@@ -534,6 +576,10 @@
   },
   {
     "type": "&^",
+    "named": false
+  },
+  {
+    "type": "'",
     "named": false
   },
   {
@@ -637,6 +683,10 @@
     "named": false
   },
   {
+    "type": "contents:",
+    "named": false
+  },
+  {
     "type": "define",
     "named": false
   },
@@ -647,6 +697,14 @@
   {
     "type": "duration",
     "named": false
+  },
+  {
+    "type": "extend",
+    "named": false
+  },
+  {
+    "type": "file",
+    "named": true
   },
   {
     "type": "from",
@@ -677,6 +735,10 @@
     "named": false
   },
   {
+    "type": "module",
+    "named": false
+  },
+  {
     "type": "or",
     "named": false
   },
@@ -686,6 +748,10 @@
   },
   {
     "type": "schema",
+    "named": false
+  },
+  {
+    "type": "schema:",
     "named": false
   },
   {

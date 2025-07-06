@@ -9,6 +9,7 @@ type merchant # module: core, file: core.module.fga
   relations
     define accountant: [user]
     define admin: [user] or owner
+    define with-dash: [user]
 
 ---
 
@@ -31,4 +32,9 @@ type merchant # module: core, file: core.module.fga
           (direct_relationship
             (identifier))
           (operator)
-          (identifier))))))
+          (identifier)))
+      (definition
+        (identifier)
+        (relation_def
+          (direct_relationship
+            (identifier)))))))

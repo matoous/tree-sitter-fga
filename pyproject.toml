@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tree-sitter-fga"
 description = "Tree sitter grammar for OpenFGA authorization schema files"
-version = "0.0.1"
+version = "0.1.0"
 keywords = ["tree-sitter", "parsers", "fga", "openfga"]
 classifiers = [
   "Intended Audience :: Developers",

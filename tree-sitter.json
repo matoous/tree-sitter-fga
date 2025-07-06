@@ -1,34 +1,35 @@
 {
-  "grammars": [
-    {
-      "name": "fga",
-      "camelcase": "Fga",
-      "scope": "source.fga",
-      "path": ".",
-      "file-types": [
-        "fga"
-      ]
-    }
-  ],
-  "metadata": {
-    "version": "0.0.1",
-    "license": "MIT",
-    "description": "Tree sitter grammar for OpenFGA authorization schema files",
-    "authors": [
-      {
-        "name": "Matous Dzivjak"
-      }
-    ],
-    "links": {
-      "repository": "https://github.com/matoous/tree-sitter-fga.git"
-    }
-  },
-  "bindings": {
-    "c": true,
-    "go": true,
-    "node": true,
-    "python": true,
-    "rust": true,
-    "swift": true
-  }
+	"grammars": [
+		{
+			"name": "fga",
+			"camelcase": "Fga",
+			"scope": "source.fga",
+			"path": ".",
+			"file-types": ["fga"],
+			"highlights": "queries/highlights.scm",
+			"injection-regex": "^fga$"
+		}
+	],
+	"metadata": {
+		"version": "0.1.0",
+		"license": "MIT",
+		"description": "Tree sitter grammar for OpenFGA authorization schema files",
+		"authors": [
+			{
+				"name": "Matous Dzivjak",
+				"email": "matousdzivjak@gmail.com"
+			}
+		],
+		"links": {
+			"repository": "https://github.com/matoous/tree-sitter-fga.git"
+		}
+	},
+	"bindings": {
+		"c": true,
+		"go": true,
+		"node": true,
+		"python": true,
+		"rust": true,
+		"swift": true
+	}
 }

@@ -86,7 +86,11 @@
       "members": [
         {
           "type": "STRING",
-          "value": "contents:"
+          "value": "contents"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
         },
         {
           "type": "REPEAT",

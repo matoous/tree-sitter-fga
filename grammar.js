@@ -24,7 +24,7 @@ const multiplicative_operators = ['*', '/', '%', '<<', '>>', '&', '&^'];
 const additive_operators = ['+', '-', '|', '^'];
 const comparative_operators = ['==', '!=', '<', '<=', '>', '>='];
 
-module.exports = grammar({
+export default grammar({
   name: 'fga',
 
   extras: ($) => [$.comment, /\s/],
@@ -45,7 +45,7 @@ module.exports = grammar({
 
     quoted_schema: ($) => seq('schema:', $._quoted_version),
 
-    contents: ($) => seq('contents:', repeat(seq('-', $.file))),
+    contents: ($) => seq('contents', ':', repeat(seq('-', $.file))),
 
     file: ($) => /.+\..+/,
 

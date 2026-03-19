@@ -1,0 +1,172 @@
+==================
+Module Aliases
+==================
+
+module access
+
+extend type organization
+  relations
+    define access_edit: [role#assignee] or admin or manager
+    define access_view: [role#assignee] or access_edit
+
+    # Team management
+    define team_edit: [role#assignee] or access_edit
+    define team_view: [role#assignee] or team_edit or access_view
+
+    define team_create: team_edit
+    define team_list: team_view
+
+extend type merchant
+  relations
+    define access_edit: [role#assignee] or admin or manager
+    define access_view: [role#assignee] or access_edit or accountant
+
+    # Delegation
+    define team_delegate: admin or manager
+
+extend type user
+  relations
+    define owner_organization: [organization]
+    define owner_merchant: [merchant]
+    define owner: owner_organization or owner_merchant
+
+---
+
+(source_file
+  (module
+    (identifier))
+  (type_declaration
+    (extended_identifier)
+    (relations
+      (definition
+        (extended_identifier)
+        (relation_def
+          (binary_relation
+            (relation_def
+              (binary_relation
+                (relation_def
+                  (direct_relationship
+                    (direct_relationship_item
+                      (relation_ref))))
+                (operator)
+                (relation_def
+                  (extended_identifier))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
+      (definition
+        (extended_identifier)
+        (relation_def
+          (binary_relation
+            (relation_def
+              (direct_relationship
+                (direct_relationship_item
+                  (relation_ref))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
+      (comment)
+      (definition
+        (extended_identifier)
+        (relation_def
+          (binary_relation
+            (relation_def
+              (direct_relationship
+                (direct_relationship_item
+                  (relation_ref))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
+      (definition
+        (extended_identifier)
+        (relation_def
+          (binary_relation
+            (relation_def
+              (binary_relation
+                (relation_def
+                  (direct_relationship
+                    (direct_relationship_item
+                      (relation_ref))))
+                (operator)
+                (relation_def
+                  (extended_identifier))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
+      (definition
+        (extended_identifier)
+        (relation_def
+          (extended_identifier)))
+      (definition
+        (extended_identifier)
+        (relation_def
+          (extended_identifier)))))
+  (type_declaration
+    (extended_identifier)
+    (relations
+      (definition
+        (extended_identifier)
+        (relation_def
+          (binary_relation
+            (relation_def
+              (binary_relation
+                (relation_def
+                  (direct_relationship
+                    (direct_relationship_item
+                      (relation_ref))))
+                (operator)
+                (relation_def
+                  (extended_identifier))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
+      (definition
+        (extended_identifier)
+        (relation_def
+          (binary_relation
+            (relation_def
+              (binary_relation
+                (relation_def
+                  (direct_relationship
+                    (direct_relationship_item
+                      (relation_ref))))
+                (operator)
+                (relation_def
+                  (extended_identifier))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
+      (comment)
+      (definition
+        (extended_identifier)
+        (relation_def
+          (binary_relation
+            (relation_def
+              (extended_identifier))
+            (operator)
+            (relation_def
+              (extended_identifier)))))))
+  (type_declaration
+    (extended_identifier)
+    (relations
+      (definition
+        (extended_identifier)
+        (relation_def
+          (direct_relationship
+            (direct_relationship_item
+              (extended_identifier)))))
+      (definition
+        (extended_identifier)
+        (relation_def
+          (direct_relationship
+            (direct_relationship_item
+              (extended_identifier)))))
+      (definition
+        (extended_identifier)
+        (relation_def
+          (binary_relation
+            (relation_def
+              (extended_identifier))
+            (operator)
+            (relation_def
+              (extended_identifier))))))))

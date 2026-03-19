@@ -1,52 +1,46 @@
-(call_expression
-  function: (identifier) @function)
-
-(call_expression
-  function: (selector_expression
-    field: (identifier) @function.method))
-
-((type_identifier) @type.builtin
-  (#match? @type.builtin "^(string|int|map|uint|list|timestamp|bool|duration|double|ipaddress)$"))
-
 (condition_declaration
   name: (identifier) @function)
 
+(conditional
+  condition: (identifier) @function)
+
+((simple_type_identifier) @type.builtin)
+
+((container_type_identifier) @type.builtin)
+
 (version) @number
+(int) @number
+(uint) @number
+(float) @number.float
+
+(string) @string
+(bytes) @string.special
+
+(boolean) @boolean
+(null) @constant.builtin
+
+(relation_ref) @type
+(all) @type
+
+(operator) @operator
+(condition_operator) @operator
+
+(model) @keyword
+(module) @keyword
+(schema) @keyword
+(relations) @keyword
+(type_declaration) @keyword
+(definition) @keyword
 
 [
-  "*"
-  "/"
-  "%"
-  ">>"
-  "<<"
-  "&"
-  "&^"
-] @operator
-
-[
-  "+"
-  "-"
-  "|"
-  "^"
-] @operator
-
-[
-  "or"
-  "and"
-  "but not"
-] @operator
-
-[
-  "model"
-  "schema"
-  "type"
-  "relations"
-  "define"
   "from"
+  "contents"
+  "extend"
 ] @keyword
 
 [
   "condition"
+  "with"
 ] @keyword.function
 
 (comment) @comment

@@ -2,7 +2,7 @@
 Mod  file
 ==================
 
-schema: '1.2'
+schema: "1.2"
 contents:
   - mod1.module.fga
   - mod2.module.fga
@@ -11,7 +11,8 @@ contents:
 
 (source_file
   (schema
-    (version))
+    (quoted_version
+      (version)))
   (contents
     (file)
     (file)))

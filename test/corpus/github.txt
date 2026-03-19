@@ -31,126 +31,153 @@ type organization
 ---
 
 (source_file
-  (model
-    (schema
-      (version)))
+  (model)
+  (schema
+    (version))
   (type_declaration
-    (identifier))
+    (extended_identifier))
   (type_declaration
-    (identifier)
+    (extended_identifier)
     (relations
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier)))))))
+            (direct_relationship_item
+              (extended_identifier))
+            (direct_relationship_item
+              (relation_ref)))))))
   (type_declaration
-    (identifier)
+    (extended_identifier)
     (relations
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier)))
-          (operator)
-          (indirect_relation
-            (identifier)
-            (identifier))))
+          (binary_relation
+            (relation_def
+              (direct_relationship
+                (direct_relationship_item
+                  (extended_identifier))
+                (direct_relationship_item
+                  (relation_ref))))
+            (operator)
+            (relation_def
+              (indirect_relation
+                (extended_identifier)
+                (extended_identifier))))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier)))
-          (operator)
-          (identifier)))
+          (binary_relation
+            (relation_def
+              (direct_relationship
+                (direct_relationship_item
+                  (extended_identifier))
+                (direct_relationship_item
+                  (relation_ref))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier))))
+            (direct_relationship_item
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier)))
-          (operator)
-          (identifier)
-          (operator)
-          (indirect_relation
-            (identifier)
-            (identifier))))
+          (binary_relation
+            (relation_def
+              (binary_relation
+                (relation_def
+                  (direct_relationship
+                    (direct_relationship_item
+                      (extended_identifier))
+                    (direct_relationship_item
+                      (relation_ref))))
+                (operator)
+                (relation_def
+                  (extended_identifier))))
+            (operator)
+            (relation_def
+              (indirect_relation
+                (extended_identifier)
+                (extended_identifier))))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier)))
-          (operator)
-          (identifier)))
+          (binary_relation
+            (relation_def
+              (direct_relationship
+                (direct_relationship_item
+                  (extended_identifier))
+                (direct_relationship_item
+                  (relation_ref))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier)))
-          (operator)
-          (identifier)
-          (operator)
-          (indirect_relation
-            (identifier)
-            (identifier))))))
+          (binary_relation
+            (relation_def
+              (binary_relation
+                (relation_def
+                  (direct_relationship
+                    (direct_relationship_item
+                      (extended_identifier))
+                    (direct_relationship_item
+                      (relation_ref))))
+                (operator)
+                (relation_def
+                  (extended_identifier))))
+            (operator)
+            (relation_def
+              (indirect_relation
+                (extended_identifier)
+                (extended_identifier))))))))
   (type_declaration
-    (identifier)
+    (extended_identifier)
     (relations
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (direct_relationship
-            (identifier))
-          (operator)
-          (identifier)))
+          (binary_relation
+            (relation_def
+              (direct_relationship
+                (direct_relationship_item
+                  (extended_identifier))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier))))
+            (direct_relationship_item
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier)))))
+            (direct_relationship_item
+              (extended_identifier))
+            (direct_relationship_item
+              (relation_ref)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier)))))
+            (direct_relationship_item
+              (extended_identifier))
+            (direct_relationship_item
+              (relation_ref)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier)
-            (relation_ref
-              (identifier)
-              (identifier))))))))
+            (direct_relationship_item
+              (extended_identifier))
+            (direct_relationship_item
+              (relation_ref))))))))

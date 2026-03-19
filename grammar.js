@@ -1,219 +1,218 @@
-// https://openfga.dev/docs/configuration-language
-const PREC = {
-  primary: 7,
-  unary: 6,
-  multiplicative: 5,
-  additive: 4,
-  comparative: 3,
-  and: 2,
+const RELATION_PREC = {
   or: 1,
+  and: 2,
+  butNot: 3,
 };
-const types = [
+
+const SIMPLE_TYPES = [
+  'bool',
   'string',
   'int',
-  'map',
   'uint',
-  'list',
-  'timestamp',
-  'bool',
-  'duration',
   'double',
+  'duration',
+  'timestamp',
   'ipaddress',
 ];
-const multiplicative_operators = ['*', '/', '%', '<<', '>>', '&', '&^'];
-const additive_operators = ['+', '-', '|', '^'];
-const comparative_operators = ['==', '!=', '<', '<=', '>', '>='];
 
 export default grammar({
   name: 'fga',
 
-  extras: ($) => [$.comment, /\s/],
+  extras: ($) => [$.comment, /[\s\f]+/],
 
   word: ($) => $.identifier,
 
-  supertypes: ($) => [$._expression],
+  supertypes: ($) => [$.relation_term],
 
   rules: {
-    source_file: ($) => choice($._project_file, $._module_file),
-
-    _project_file: ($) => seq(alias($.quoted_schema, $.schema), $.contents),
-    _module_file: ($) =>
-      seq(
-        choice($.model, $.module),
-        repeat(choice($.type_declaration, $.condition_declaration)),
+    source_file: ($) =>
+      choice(
+        seq(alias($.quoted_schema, $.schema), optional($.contents)),
+        seq($.model, $.schema, repeat(choice($.type_declaration, $.condition_declaration))),
+        seq($.module, repeat(choice($.type_declaration, $.condition_declaration))),
       ),
 
-    quoted_schema: ($) => seq('schema:', $._quoted_version),
+    model: () => 'model',
+
+    module: ($) => seq('module', field('name', $.identifier)),
+
+    schema: ($) => seq('schema', field('version', $.version)),
+
+    quoted_schema: ($) => seq('schema', ':', $.quoted_version),
+
+    version: () => /\d+\.\d+/,
+
+    quoted_version: ($) => choice(seq('"', $.version, '"'), seq('\'', $.version, '\'')),
 
     contents: ($) => seq('contents', ':', repeat(seq('-', $.file))),
 
-    file: ($) => /.+\..+/,
-
-    schema: ($) => seq('schema', $.version),
-
-    version: ($) => /[0-9]+\.[0-9]+/,
-    _quoted_version: ($) => seq('\'', $.version, '\''),
-
-    model: ($) => seq('model', '\n', $.schema),
-    module: ($) => seq('module', $.identifier),
+    file: () => token(/[^\s][^\r\n]*/),
 
     type_declaration: ($) =>
       seq(
         optional('extend'),
         'type',
-        $.identifier,
-        '\n',
+        field('name', $.extended_identifier),
         optional($.relations),
       ),
 
-    relations: ($) => seq('relations', repeat($.definition)),
+    relations: ($) => seq('relations', repeat1($.definition)),
 
     definition: ($) =>
-      seq('define', field('relation', $.identifier), ':', $.relation_def),
+      seq('define', field('relation', $.extended_identifier), ':', field('value', $.relation_def)),
 
     relation_def: ($) =>
       choice(
+        $.binary_relation,
+        $.relation_term,
+      ),
+
+    relation_term: ($) =>
+      choice(
+        $.parenthesized_relation,
         $.direct_relationship,
-        seq(
-          optional(seq($.direct_relationship, $.operator)),
-          list(choice($.identifier, $.indirect_relation), $.operator),
+        $.indirect_relation,
+        $.extended_identifier,
+      ),
+
+    binary_relation: ($) =>
+      choice(
+        prec.left(
+          RELATION_PREC.or,
+          seq(
+            field('left', $.relation_def),
+            field('operator', alias('or', $.operator)),
+            field('right', $.relation_def),
+          ),
+        ),
+        prec.left(
+          RELATION_PREC.and,
+          seq(
+            field('left', $.relation_def),
+            field('operator', alias('and', $.operator)),
+            field('right', $.relation_def),
+          ),
+        ),
+        prec.left(
+          RELATION_PREC.butNot,
+          seq(
+            field('left', $.relation_def),
+            field('operator', alias('but not', $.operator)),
+            field('right', $.relation_def),
+          ),
         ),
       ),
 
-    operator: ($) => choice('or', 'and', 'but not'),
+    operator: () => choice('or', 'and', 'but not'),
+
+    parenthesized_relation: ($) => seq('(', $.relation_def, ')'),
 
     direct_relationship: ($) =>
-      seq(
-        '[',
-        list(
-          seq(
-            choice($.identifier, $.relation_ref, $.all),
-            optional($.conditional),
-          ),
-          ',',
-        ),
-        ']',
-      ),
+      seq('[', optional(commaSep1($.direct_relationship_item)), ']'),
 
-    conditional: ($) => seq('with', $.identifier),
+    direct_relationship_item: ($) =>
+      seq(choice($.extended_identifier, $.relation_ref, $.all), optional($.conditional)),
 
-    indirect_relation: ($) => seq($.identifier, 'from', $.identifier),
+    relation_ref: () =>
+      token(prec(2, /[A-Za-z_][A-Za-z0-9_./-]*#[A-Za-z_][A-Za-z0-9_./-]*/)),
 
-    relation_ref: ($) =>
-      seq($.identifier, token.immediate(prec(1, '#')), $.identifier),
+    all: () => token(prec(2, /[A-Za-z_][A-Za-z0-9_./-]*:\*/)),
 
-    all: ($) => seq($.identifier, token.immediate(':*')),
+    conditional: ($) => seq('with', field('condition', $.identifier)),
+
+    indirect_relation: ($) =>
+      seq(field('relation', $.extended_identifier), 'from', field('tupleset', $.extended_identifier)),
 
     condition_declaration: ($) =>
       seq(
         'condition',
         field('name', $.identifier),
         '(',
-        optional(list($.param, ',')),
+        optional(commaSep1($.param)),
         ')',
         field('body', $.condition_body),
       ),
 
-    param: ($) => seq($.identifier, ':', $.type_identifier),
+    param: ($) => seq(field('name', $.identifier), ':', field('type', $.type_identifier)),
 
-    type_identifier: ($) => choice(...types),
+    type_identifier: ($) =>
+      choice($.simple_type_identifier, $.container_type_identifier),
 
-    _comparative_operator: ($) => choice(...comparative_operators),
+    simple_type_identifier: () => choice(...SIMPLE_TYPES),
 
-    condition_body: ($) => seq('{', $._expression, '}'),
+    container_type_identifier: ($) =>
+      seq(choice('map', 'list'), '<', $.simple_type_identifier, '>'),
 
-    binary_expression: ($) =>
+    condition_body: ($) => seq('{', repeat($._condition_item), '}'),
+
+    _condition_item: ($) =>
       choice(
-        prec.left(
-          PREC.multiplicative,
-          seq(
-            field('left', $._expression),
-            field('operator', choice(...multiplicative_operators)),
-            field('right', $._expression),
-          ),
-        ),
-        prec.left(
-          PREC.additive,
-          seq(
-            field('left', $._expression),
-            field('operator', choice(...additive_operators)),
-            field('right', $._expression),
-          ),
-        ),
-        prec.left(
-          PREC.comparative,
-          seq(
-            field('left', $._expression),
-            field('operator', choice(...comparative_operators)),
-            field('right', $._expression),
-          ),
-        ),
-        prec.left(
-          PREC.and,
-          seq(
-            field('left', $._expression),
-            field('operator', '&&'),
-            field('right', $._expression),
-          ),
-        ),
-        prec.left(
-          PREC.or,
-          seq(
-            field('left', $._expression),
-            field('operator', '||'),
-            field('right', $._expression),
-          ),
-        ),
-      ),
-
-    unary_expression: ($) =>
-      prec(
-        PREC.unary,
-        seq(
-          field('operator', choice('+', '-', '!')),
-          field('operand', $._expression),
-        ),
-      ),
-
-    call_expression: ($) =>
-      prec(
-        PREC.primary,
-        seq(
-          field('function', choice($.selector_expression, $.identifier)),
-          field('arguments', $.argument_list),
-        ),
-      ),
-
-    selector_expression: ($) =>
-      prec(
-        PREC.primary,
-        seq(field('operand', $.identifier), '.', field('field', $.identifier)),
-      ),
-
-    argument_list: ($) => seq('(', optional(list($._expression, ',')), ')'),
-
-    _expression: ($) =>
-      choice(
-        // $.unary_expression,
-        $.binary_expression,
-        $.selector_expression,
-        $.call_expression,
+        $.parenthesized_condition,
+        $.bracket_condition,
+        $.braced_condition,
+        $.bytes,
+        $.string,
+        $.float,
+        $.uint,
+        $.int,
+        $.boolean,
+        $.null,
         $.identifier,
-        // slices?
+        $.condition_operator,
+        '.',
+        ',',
+        ':',
+        '?',
       ),
 
-    identifier: ($) => /[a-zA-Z_-]+/,
+    parenthesized_condition: ($) => seq('(', repeat($._condition_item), ')'),
 
-    comment: ($) => token(seq('#', /.+/)),
+    bracket_condition: ($) => seq('[', repeat($._condition_item), ']'),
+
+    braced_condition: ($) => seq('{', repeat($._condition_item), '}'),
+
+    condition_operator: () =>
+      token(choice('==', '!=', '<=', '>=', '&&', '||', 'in', '<', '>', '-', '!', '+', '*', '/', '%')),
+
+    boolean: () => choice('true', 'false'),
+
+    null: () => 'null',
+
+    float: () => token(choice(/\d+\.\d+([eE][+-]?\d+)?/, /\d+[eE][+-]?\d+/, /\.\d+([eE][+-]?\d+)?/)),
+
+    int: () => token(choice(/0x[0-9a-fA-F]+/, /\d+/)),
+
+    uint: () => token(choice(/0x[0-9a-fA-F]+[uU]/, /\d+[uU]/)),
+
+    bytes: () =>
+      token(
+        choice(
+          /[bB]"([^"\\\r\n]|\\.)*"/,
+          /[bB]'([^'\\\r\n]|\\.)*'/,
+        ),
+      ),
+
+    string: () =>
+      token(
+        choice(
+          /"([^"\\\r\n]|\\.)*"/,
+          /'([^'\\\r\n]|\\.)*'/,
+        ),
+      ),
+
+    identifier: () => /[A-Za-z_][A-Za-z0-9_-]*/,
+
+    extended_identifier: () => token(prec(1, /[A-Za-z_][A-Za-z0-9_./-]*/)),
+
+    comment: () => token(seq('#', /[^\r\n]*/)),
   },
 });
 
 /**
- * Creates a rule to match one or more of the rules separated by a separator
+ * Creates a comma-separated list of one or more items.
  *
- * @param {rule} rule to match against
- * @param {separator} separator of the list of elements
+ * @param {RuleOrLiteral} rule
  */
-function list(rule, separator) {
-  return seq(rule, optional(repeat(seq(separator, rule))));
+function commaSep1(rule) {
+  return seq(rule, repeat(seq(',', rule)));
 }

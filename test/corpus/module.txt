@@ -14,9 +14,9 @@ extend type user
   (module
     (identifier))
   (type_declaration
-    (identifier)
+    (extended_identifier)
     (relations
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (identifier))))))
+          (extended_identifier))))))

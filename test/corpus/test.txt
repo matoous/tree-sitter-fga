@@ -14,27 +14,33 @@ type merchant # module: core, file: core.module.fga
 ---
 
 (source_file
-  (model
-    (schema
-      (version)))
+  (model)
+  (schema
+    (version))
   (type_declaration
-    (identifier)
+    (extended_identifier)
     (comment)
     (relations
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier))))
+            (direct_relationship_item
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (direct_relationship
-            (identifier))
-          (operator)
-          (identifier)))
+          (binary_relation
+            (relation_def
+              (direct_relationship
+                (direct_relationship_item
+                  (extended_identifier))))
+            (operator)
+            (relation_def
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier)))))))
+            (direct_relationship_item
+              (extended_identifier))))))))

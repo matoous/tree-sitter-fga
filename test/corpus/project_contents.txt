@@ -1,0 +1,26 @@
+==================
+Project Contents
+==================
+
+schema: '1.2'
+contents:
+  - core.module.fga
+  # keep this sorted
+  - access.module.fga
+  - reporting.module.fga
+  # deprecated modules should stay last
+  - legacy.module.fga
+
+---
+
+(source_file
+  (schema
+    (quoted_version
+      (version)))
+  (contents
+    (file)
+    (comment)
+    (file)
+    (file)
+    (comment)
+    (file)))

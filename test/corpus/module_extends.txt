@@ -1,0 +1,53 @@
+==================
+Module Extends
+==================
+
+module board
+
+extend type user
+  relations
+    define another_thing: [user]
+
+extend type other
+  relations
+    define second_thing: [user with other_check]
+
+condition other_check(other: int) {
+  other <= 10
+}
+
+---
+
+(source_file
+  (module
+    (identifier))
+  (type_declaration
+    (extended_identifier)
+    (relations
+      (definition
+        (extended_identifier)
+        (relation_def
+          (direct_relationship
+            (direct_relationship_item
+              (extended_identifier)))))))
+  (type_declaration
+    (extended_identifier)
+    (relations
+      (definition
+        (extended_identifier)
+        (relation_def
+          (direct_relationship
+            (direct_relationship_item
+              (extended_identifier)
+              (conditional
+                (identifier))))))))
+  (condition_declaration
+    (identifier)
+    (param
+      (identifier)
+      (type_identifier
+        (simple_type_identifier)))
+    (condition_body
+      (identifier)
+      (condition_operator)
+      (int))))

@@ -18,36 +18,41 @@ condition non_expired_grant(current_time: timestamp, grant_time: timestamp, gran
 ---
 
 (source_file
-  (model
-    (schema
-      (version)))
+  (model)
+  (schema
+    (version))
   (type_declaration
-    (identifier))
+    (extended_identifier))
   (type_declaration
-    (identifier)
+    (extended_identifier)
     (relations
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier)
-            (identifier)
-            (conditional
-              (identifier)))))))
+            (direct_relationship_item
+              (extended_identifier))
+            (direct_relationship_item
+              (extended_identifier)
+              (conditional
+                (identifier))))))))
   (condition_declaration
     (identifier)
     (param
       (identifier)
-      (type_identifier))
+      (type_identifier
+        (simple_type_identifier)))
     (param
       (identifier)
-      (type_identifier))
+      (type_identifier
+        (simple_type_identifier)))
     (param
       (identifier)
-      (type_identifier))
+      (type_identifier
+        (simple_type_identifier)))
     (condition_body
-      (binary_expression
-        (identifier)
-        (binary_expression
-          (identifier)
-          (identifier))))))
+      (identifier)
+      (condition_operator)
+      (identifier)
+      (condition_operator)
+      (identifier))))

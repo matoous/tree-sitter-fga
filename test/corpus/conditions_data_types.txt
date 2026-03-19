@@ -1,0 +1,133 @@
+==================
+Condition Data Types
+==================
+
+model
+  schema 1.1
+
+type user
+
+type datatype_test
+  relations
+    define is_valid: [user with is_valid_string, user with is_valid_list_string, user with is_valid_map_string, user with is_valid_uint]
+
+condition is_valid_list_string(_liststring: list<string>) {
+  "1" in _liststring && _liststring[0] != "" && _liststring.exists(x, x > "")
+}
+
+condition is_valid_map_string(_mapstring: map<string>) {
+  _mapstring["key"] != "" && _mapstring["key"] > ""
+}
+
+condition is_valid_string(_string: string) {
+  _string != "" && _string.startsWith("1")
+}
+
+condition is_valid_uint(_uint: uint) {
+  _uint != 0u && _uint > 0u
+}
+
+---
+
+(source_file
+  (model)
+  (schema
+    (version))
+  (type_declaration
+    (extended_identifier))
+  (type_declaration
+    (extended_identifier)
+    (relations
+      (definition
+        (extended_identifier)
+        (relation_def
+          (direct_relationship
+            (direct_relationship_item
+              (extended_identifier)
+              (conditional
+                (identifier)))
+            (direct_relationship_item
+              (extended_identifier)
+              (conditional
+                (identifier)))
+            (direct_relationship_item
+              (extended_identifier)
+              (conditional
+                (identifier)))
+            (direct_relationship_item
+              (extended_identifier)
+              (conditional
+                (identifier))))))))
+  (condition_declaration
+    (identifier)
+    (param
+      (identifier)
+      (type_identifier
+        (container_type_identifier
+          (simple_type_identifier))))
+    (condition_body
+      (string)
+      (condition_operator)
+      (identifier)
+      (condition_operator)
+      (identifier)
+      (bracket_condition
+        (int))
+      (condition_operator)
+      (string)
+      (condition_operator)
+      (identifier)
+      (identifier)
+      (parenthesized_condition
+        (identifier)
+        (identifier)
+        (condition_operator)
+        (string))))
+  (condition_declaration
+    (identifier)
+    (param
+      (identifier)
+      (type_identifier
+        (container_type_identifier
+          (simple_type_identifier))))
+    (condition_body
+      (identifier)
+      (bracket_condition
+        (string))
+      (condition_operator)
+      (string)
+      (condition_operator)
+      (identifier)
+      (bracket_condition
+        (string))
+      (condition_operator)
+      (string)))
+  (condition_declaration
+    (identifier)
+    (param
+      (identifier)
+      (type_identifier
+        (simple_type_identifier)))
+    (condition_body
+      (identifier)
+      (condition_operator)
+      (string)
+      (condition_operator)
+      (identifier)
+      (identifier)
+      (parenthesized_condition
+        (string))))
+  (condition_declaration
+    (identifier)
+    (param
+      (identifier)
+      (type_identifier
+        (simple_type_identifier)))
+    (condition_body
+      (identifier)
+      (condition_operator)
+      (uint)
+      (condition_operator)
+      (identifier)
+      (condition_operator)
+      (uint))))

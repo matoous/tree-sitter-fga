@@ -25,61 +25,66 @@ condition in_company_network(user_ip: ipaddress, cidr: string) {
 ---
 
 (source_file
-  (model
-    (schema
-      (version)))
+  (model)
+  (schema
+    (version))
   (type_declaration
-    (identifier))
+    (extended_identifier))
   (type_declaration
-    (identifier)
+    (extended_identifier)
     (relations
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier))))
+            (direct_relationship_item
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (relation_ref
-              (identifier)
-              (identifier))
-            (conditional
-              (identifier)))))))
+            (direct_relationship_item
+              (relation_ref)
+              (conditional
+                (identifier))))))))
   (type_declaration
-    (identifier)
+    (extended_identifier)
     (relations
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier))))
+            (direct_relationship_item
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
           (direct_relationship
-            (identifier))))
+            (direct_relationship_item
+              (extended_identifier)))))
       (definition
-        (identifier)
+        (extended_identifier)
         (relation_def
-          (identifier)
-          (operator)
-          (indirect_relation
-            (identifier)
-            (identifier))))))
+          (binary_relation
+            (relation_def
+              (extended_identifier))
+            (operator)
+            (relation_def
+              (indirect_relation
+                (extended_identifier)
+                (extended_identifier))))))))
   (condition_declaration
     (identifier)
     (param
       (identifier)
-      (type_identifier))
+      (type_identifier
+        (simple_type_identifier)))
     (param
       (identifier)
-      (type_identifier))
+      (type_identifier
+        (simple_type_identifier)))
     (condition_body
-      (call_expression
-        (selector_expression
-          (identifier)
-          (identifier))
-        (argument_list
-          (identifier))))))
+      (identifier)
+      (identifier)
+      (parenthesized_condition
+        (identifier)))))

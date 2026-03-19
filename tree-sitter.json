@@ -21,7 +21,7 @@
 			}
 		],
 		"links": {
-			"repository": "https://github.com/matoous/tree-sitter-fga.git"
+			"repository": "https://github.com/matoous/tree-sitter-fga"
 		}
 	},
 	"bindings": {

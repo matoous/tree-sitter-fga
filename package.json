@@ -1,52 +1,59 @@
 {
-	"name": "tree-sitter-fga",
-	"version": "0.1.0",
-	"description": "Tree sitter grammar for OpenFGA authorization schema files",
-	"main": "index.js",
-	"types": "bindings/node",
-	"author": "Matous Dzivjak",
-	"license": "MIT",
-	"keywords": [
-		"tree-sitter",
-		"parser",
-		"fga",
-		"openfga"
-	],
-	"files": [
-		"grammar.js",
-		"binding.gyp",
-		"prebuilds/**",
-		"bindings/node/*",
-		"queries/*",
-		"src/**"
-	],
-	"type": "module",
+  "name": "tree-sitter-fga",
+  "version": "0.1.0",
+  "description": "Tree sitter grammar for OpenFGA authorization schema files",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "author": "Matous Dzivjak",
+  "license": "MIT",
+  "keywords": [
+    "tree-sitter",
+    "parser",
+    "fga",
+    "openfga"
+  ],
+  "files": [
+    "grammar.js",
+    "tree-sitter.json",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**",
+    "*.wasm"
+  ],
+  "type": "module",
   "repository": {
-		"type": "git",
-		"url": "https://github.com/matoous/tree-sitter-fga.git"
-	},
-	"scripts": {
-		"build": "tree-sitter generate && node-gyp build",
-		"lint": "eslint grammar.js",
-		"lint:fix": "eslint --fix grammar.js",
-		"test": "tree-sitter test && script/parse-examples",
-		"test-windows": "tree-sitter test",
-		"install": "node-gyp-build",
-		"prebuildify": "prebuildify --napi --strip",
-		"prestart": "tree-sitter build --wasm",
-		"start": "tree-sitter playground"
-	},
-	"dependencies": {
-		"node-addon-api": "^8.2.1",
-		"node-gyp-build": "^4.8.2"
-	},
-	"devDependencies": {
-		"eslint": "^9.12.0",
-		"eslint-config-treesitter": "^1.0.2",
-		"prebuildify": "^6.0.1",
-		"tree-sitter-cli": "^0.25.6"
-	},
-	"peerDependencies": {
-		"tree-sitter": "^0.25.0"
-	}
+    "type": "git",
+    "url": "https://github.com/matoous/tree-sitter-fga.git"
+  },
+  "scripts": {
+    "build": "tree-sitter generate && node-gyp build",
+    "lint": "eslint grammar.js",
+    "lint:fix": "eslint --fix grammar.js",
+    "test": "tree-sitter test",
+    "test-windows": "tree-sitter test",
+    "install": "node-gyp-build",
+    "prebuildify": "prebuildify --napi --strip",
+    "prestart": "tree-sitter build --wasm",
+    "start": "tree-sitter playground"
+  },
+  "dependencies": {
+    "node-addon-api": "^8.6.0",
+    "node-gyp-build": "^4.8.4"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.4",
+    "eslint-config-treesitter": "^1.0.2",
+    "prebuildify": "^6.0.1",
+    "tree-sitter-cli": "^0.26.7"
+  },
+  "peerDependencies": {
+    "tree-sitter": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "tree-sitter": {
+      "optional": true
+    }
+  }
 }

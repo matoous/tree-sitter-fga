@@ -2,14 +2,14 @@
 
 # tree-sitter-fga
 
-[![CI][ci]](https://github.com/matoous/tree-sitter-fga/actions/workflows/ci.yml)
+[![CI][ci]](https://github.com/matoous/tree-sitter-fga/actions/workflows/ci.yaml)
 <!-- [![crates][crates]](https://crates.io/crates/tree-sitter-fga) -->
 <!-- [![npm][npm]](https://www.npmjs.com/package/tree-sitter-fga) -->
 <!-- [![pypi][pypi]](https://pypi.org/project/tree-sitter-fga) -->
 
 </div>
 
-A [tree sitter](https://github.com/tree-sitter/tree-sitter) grammer for [OpenFGA](https://openfga.dev/) authorization schema language.
+A [tree-sitter](https://github.com/tree-sitter/tree-sitter) grammar for [OpenFGA](https://openfga.dev/) authorization schema language.
 
 See https://openfga.dev/docs/configuration-language for the configuration language semantics.
 

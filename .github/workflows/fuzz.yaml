@@ -1,13 +1,18 @@
 name: Fuzz Parser
 
 on:
+  workflow_dispatch:
   push:
-    branches: [master]
+    branches: [main]
     paths:
-      - src/scanner.c
+      - .github/workflows/fuzz.yaml
+      - grammar.js
+      - src/**
   pull_request:
     paths:
-      - src/scanner.c
+      - .github/workflows/fuzz.yaml
+      - grammar.js
+      - src/**
 
 jobs:
   fuzz:

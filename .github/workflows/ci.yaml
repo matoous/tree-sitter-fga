@@ -1,21 +1,44 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
+      - .github/workflows/ci.yaml
+      - Cargo.toml
+      - CMakeLists.txt
+      - Makefile
+      - Package.swift
+      - binding.gyp
+      - bindings/**
       - grammar.js
+      - go.mod
+      - package.json
+      - pyproject.toml
+      - queries/**
+      - setup.py
       - src/**
       - test/**
-      - bindings/**
-      - binding.gyp
+      - tree-sitter.json
   pull_request:
     paths:
+      - .github/workflows/ci.yaml
+      - Cargo.toml
+      - CMakeLists.txt
+      - Makefile
+      - Package.swift
+      - binding.gyp
+      - bindings/**
       - grammar.js
+      - go.mod
+      - package.json
+      - pyproject.toml
+      - queries/**
+      - setup.py
       - src/**
       - test/**
-      - bindings/**
-      - binding.gyp
+      - tree-sitter.json
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
@@ -39,6 +62,8 @@ jobs:
       - name: Run tests
         uses: tree-sitter/parser-test-action@05f6ce7c7e54603c45cd87ed926725dc870bcc63 # v3
         with:
+          node-version: 22
+          go-version: '1.23'
           test-rust: true
           test-node: true
           test-python: true

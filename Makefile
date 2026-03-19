@@ -1,5 +1,5 @@
 LANGUAGE_NAME := tree-sitter-fga
-HOMEPAGE_URL := https://github.com/matoous/tree-sitter-fga.git
+HOMEPAGE_URL := https://github.com/matoous/tree-sitter-fga
 VERSION := 0.1.0
 
 # repository

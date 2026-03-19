@@ -5,10 +5,10 @@ Project Contents
 schema: '1.2'
 contents:
   - core.module.fga
-  # keep this sorted
-  - access.module.fga
-  - reporting.module.fga
-  # deprecated modules should stay last
+  # module files stay sorted
+  - docs.module.fga
+  - sharing.module.fga
+  # compatibility modules stay last
   - legacy.module.fga
 
 ---

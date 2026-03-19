@@ -2,33 +2,33 @@
 Module Aliases
 ==================
 
-module access
+module sharing
 
-extend type organization
+extend type group
   relations
-    define access_edit: [role#assignee] or admin or manager
-    define access_view: [role#assignee] or access_edit
+    define editor: [role#member] or owner
+    define viewer: [role#member] or editor
 
-    # Team management
-    define team_edit: [role#assignee] or access_edit
-    define team_view: [role#assignee] or team_edit or access_view
+    # Membership
+    define member_admin: [role#member] or editor
+    define member_viewer: [role#member] or member_admin or viewer
 
-    define team_create: team_edit
-    define team_list: team_view
+    define member_add: member_admin
+    define member_list: member_viewer
 
-extend type merchant
+extend type folder
   relations
-    define access_edit: [role#assignee] or admin or manager
-    define access_view: [role#assignee] or access_edit or accountant
+    define editor: [role#member] or owner
+    define viewer: [role#member] or editor or commenter
 
-    # Delegation
-    define team_delegate: admin or manager
+    # Sharing
+    define share: owner or editor
 
 extend type user
   relations
-    define owner_organization: [organization]
-    define owner_merchant: [merchant]
-    define owner: owner_organization or owner_merchant
+    define group_owner: [group]
+    define folder_owner: [folder]
+    define owner: group_owner or folder_owner
 
 ---
 
@@ -43,14 +43,9 @@ extend type user
         (relation_def
           (binary_relation
             (relation_def
-              (binary_relation
-                (relation_def
-                  (direct_relationship
-                    (direct_relationship_item
-                      (relation_ref))))
-                (operator)
-                (relation_def
-                  (extended_identifier))))
+              (direct_relationship
+                (direct_relationship_item
+                  (relation_ref))))
             (operator)
             (relation_def
               (extended_identifier)))))
@@ -109,14 +104,9 @@ extend type user
         (relation_def
           (binary_relation
             (relation_def
-              (binary_relation
-                (relation_def
-                  (direct_relationship
-                    (direct_relationship_item
-                      (relation_ref))))
-                (operator)
-                (relation_def
-                  (extended_identifier))))
+              (direct_relationship
+                (direct_relationship_item
+                  (relation_ref))))
             (operator)
             (relation_def
               (extended_identifier)))))

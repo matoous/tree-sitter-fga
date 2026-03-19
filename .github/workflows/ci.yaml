@@ -1,21 +1,44 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
+      - .github/workflows/ci.yaml
+      - Cargo.toml
+      - CMakeLists.txt
+      - Makefile
+      - Package.swift
+      - binding.gyp
+      - bindings/**
       - grammar.js
+      - go.mod
+      - package.json
+      - pyproject.toml
+      - queries/**
+      - setup.py
       - src/**
       - test/**
-      - bindings/**
-      - binding.gyp
+      - tree-sitter.json
   pull_request:
     paths:
+      - .github/workflows/ci.yaml
+      - Cargo.toml
+      - CMakeLists.txt
+      - Makefile
+      - Package.swift
+      - binding.gyp
+      - bindings/**
       - grammar.js
+      - go.mod
+      - package.json
+      - pyproject.toml
+      - queries/**
+      - setup.py
       - src/**
       - test/**
-      - bindings/**
-      - binding.gyp
+      - tree-sitter.json
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}

@@ -3,8 +3,8 @@ package tree_sitter_fga_test
 import (
 	"testing"
 
-	tree_sitter "github.com/smacker/go-tree-sitter"
-	"github.com/tree-sitter/tree-sitter-fga"
+	tree_sitter "github.com/tree-sitter/go-tree-sitter"
+	tree_sitter_fga "github.com/matoous/tree-sitter-fga/bindings/go"
 )
 
 func TestCanLoadGrammar(t *testing.T) {

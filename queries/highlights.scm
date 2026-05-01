@@ -38,21 +38,19 @@
 (boolean) @boolean
 (null) @constant.builtin
 
+; Neovim does not implement the `#is-not?` predicate, so keep parameter
+; definitions and condition-body references in separate structural matches.
 ((condition_body
-   (identifier) @variable)
- (#is-not? local))
+   (identifier) @variable))
 
 ((parenthesized_condition
-   (identifier) @variable)
- (#is-not? local))
+   (identifier) @variable))
 
 ((bracket_condition
-   (identifier) @variable)
- (#is-not? local))
+   (identifier) @variable))
 
 ((braced_condition
-   (identifier) @variable)
- (#is-not? local))
+   (identifier) @variable))
 
 (operator) @operator
 (condition_operator) @operator

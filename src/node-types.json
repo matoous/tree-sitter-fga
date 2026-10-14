@@ -87,6 +87,10 @@
           "named": true
         },
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "condition_operator",
           "named": true
         },
@@ -146,6 +150,10 @@
           "named": true
         },
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "condition_operator",
           "named": true
         },
@@ -202,6 +210,10 @@
         },
         {
           "type": "bytes",
+          "named": true
+        },
+        {
+          "type": "comment",
           "named": true
         },
         {
@@ -266,7 +278,7 @@
     },
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "param",
@@ -285,6 +297,10 @@
         "types": [
           {
             "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "inline_condition",
             "named": true
           }
         ]
@@ -353,7 +369,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "direct_relationship_item",
@@ -479,6 +495,10 @@
         },
         {
           "type": "bytes",
+          "named": true
+        },
+        {
+          "type": "comment",
           "named": true
         },
         {
@@ -811,6 +831,10 @@
   },
   {
     "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "inline_condition",
     "named": true
   },
   {

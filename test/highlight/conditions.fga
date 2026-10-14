@@ -1,0 +1,26 @@
+model
+  schema 1.2
+
+type document
+# <- keyword
+#    ^ type
+  relations
+    define viewer: [user with $expression]
+#          ^ property
+#                   ^ type
+#                             ^ constant.builtin
+
+condition check(value: int) {
+#         ^ function
+#               ^ variable.parameter
+#                      ^ type.builtin
+#                           ^ punctuation.bracket
+  // ignored closing brace: }
+# ^ comment
+  value > 0 && r"raw\string" != "other"
+# ^ variable.parameter
+#       ^ operator
+#         ^ number
+#              ^ string
+}
+# <- punctuation.bracket

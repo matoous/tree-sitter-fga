@@ -1,4 +1,5 @@
 LANGUAGE_NAME := tree-sitter-fga
+DESCRIPTION := OpenFGA authorization schema grammar for tree-sitter
 HOMEPAGE_URL := https://github.com/matoous/tree-sitter-fga
 VERSION := 0.1.0
 

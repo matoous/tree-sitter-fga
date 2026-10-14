@@ -1,0 +1,426 @@
+{
+  "source": "https://github.com/openfga/language/blob/f558baace40cebd4548ab50b6d50ce65a940babb/tests/data/dsl-syntax-validation-cases.yaml",
+  "cases": [
+    {
+      "name": "valid syntax (1)",
+      "dsl": "model\n  schema 1.1\n",
+      "validSyntax": true
+    },
+    {
+      "name": "valid syntax (2): comment preceding model",
+      "dsl": "# ID: 123\nmodel\n  schema 1.1\n",
+      "validSyntax": true
+    },
+    {
+      "name": "valid syntax (3): extraneous spacing",
+      "dsl": "model\n  schema 1.1\ntype user    \ntype folder    \n        \n  relations     \n    define admin: [user]     \n    define viewer: [user]   \n      \n    define can_view: viewer or admin\n",
+      "validSyntax": true
+    },
+    {
+      "name": "valid syntax (4): extended identifiers",
+      "dsl": "model\n  schema 1.1\ntype a\ntype _a\ntype __a__\ntype a/b\ntype _.a_/_b._\ntype a.bc/def\ntype a.b\n  relations\n    define a.b.c: [a/b]\n    define a.b/c: [_.a_/_b._]\n",
+      "validSyntax": true
+    },
+    {
+      "name": "no model header",
+      "dsl": "type user\n",
+      "validSyntax": false
+    },
+    {
+      "name": "no schema value",
+      "dsl": "model\ntype user\n",
+      "validSyntax": false
+    },
+    {
+      "name": "schema required",
+      "dsl": "model\n  schema1.1\n",
+      "validSyntax": false
+    },
+    {
+      "name": "schema 1.1 required",
+      "dsl": "model\n  schema 11\n",
+      "validSyntax": false
+    },
+    {
+      "name": "schema 1.1 required (2)",
+      "dsl": "model\n  schema a.b\n",
+      "validSyntax": false
+    },
+    {
+      "name": "a module with missing name",
+      "dsl": "module\n\ntype user\n",
+      "validSyntax": false
+    },
+    {
+      "name": "a module with missing name with whitespace",
+      "dsl": "module     \n\ntype user",
+      "validSyntax": false
+    },
+    {
+      "name": "no relations keyword",
+      "dsl": "model\n  schema 1.1\ntype user\ntype folder\n  define viewer: [user]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "mixed operators",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define own: [user]\n    define follower: [user]\n    define blocked: [user]\n    define viewer: [user] and follower or own but not blocked\n",
+      "validSyntax": false
+    },
+    {
+      "name": "mixed operators with parens",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define own: [user]\n    define follower: [user]\n    define blocked: [user]\n    define viewer: [user] and (follower but not blocked) or own\n",
+      "validSyntax": false
+    },
+    {
+      "name": "mixed operators with mulitple paren sets",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define own: [user]\n    define follower: [user]\n    define blocked: [user]\n    define viewer: [user] and (follower but not blocked) or (foo and bar) and (baz or foobar)\n",
+      "validSyntax": false
+    },
+    {
+      "name": "mixed operators with mulitple operations and paren sets",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define allowed: [user]\n    define follower: [user]\n    define blocked: [user]\n    define restricted: [user]\n    define viewer: [user] or allowed or follower or (blocked or restricted or (foo and bar but not baz))\n",
+      "validSyntax": false
+    },
+    {
+      "name": "mixed operators with mixed operations and paren sets",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define follower: [user]\n    define blocked: [user]\n    define restricted: [user]\n    define viewer: [user] and follower or (restricted but not blocked)\n",
+      "validSyntax": false
+    },
+    {
+      "name": "mixed operators with mixed operations and paren sets",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define follower: [user]\n    define blocked: [user]\n    define restricted: [user]\n    define viewer: [user] and (follower but not blocked but not restricted)\n",
+      "validSyntax": false
+    },
+    {
+      "name": "misspelled define",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    defne viewer: [user]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "comments inbetween relationships",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    # This is a comment 1\n    define viewer: [user]\n    # This is a comment 2\n    define owner: [user]\n",
+      "validSyntax": true
+    },
+    {
+      "name": "duplicate relations",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user]\n    define viewer: [user]\ntype member\n",
+      "validSyntax": true,
+      "semanticErrors": [
+        "'viewer' is already defined in 'document'"
+      ]
+    },
+    {
+      "name": "mixture of 1.0 and 1.1 should yield error",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n  relations\n    define member: [user]\ntype group\n  relations\n    define parent as self\n    define viewer as viewer from parent\n",
+      "validSyntax": false
+    },
+    {
+      "name": "empty directly assignable relations with spaces should yield error",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n  relations\n    define member: [ ]\n    define reader: [user]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "empty directly assignable relations without spaces should yield error",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n  relations\n    define member: []\n    define reader: [user]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "model 1.1 has no directly allowed types in viewer",
+      "dsl": "model\n  schema 1.1\ntype user\ntype folder\n  relations\n    define parent: [folder]\n    define viewer as self or viewer from parent\n",
+      "validSyntax": false
+    },
+    {
+      "name": "mixing 1.0 and 1.1 should not be allowed as non assignable self is not allowed",
+      "dsl": "model\n  schema 1.1\ntype user\ntype folder\n  relations\n    define reader: [user]\n    define viewer as self or reader\n",
+      "validSyntax": false
+    },
+    {
+      "name": "should not allow no model schema",
+      "dsl": "type user\ntype group\n  relations\n    define group: [user] as self\n",
+      "validSyntax": false
+    },
+    {
+      "name": "incorrect wildcard restriction should be raised",
+      "dsl": "model\n  schema 1.1\ntype user\ntype group\n  relations\n    define member: [user, user:*:*]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "exclusion target not allow to reference itself in TTU",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define editor: [user]\n    define viewer: editor but not [document#viewer]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "detect if every child in union are related",
+      "dsl": "model\n  schema 1.1\ntype document\n  relations\n    define viewer: [document#viewer] or [document#editor]\n    define editor: [document#viewer] or [document#editor]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "intersection child to reference other relations for same type",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define editor: [user]\n    define viewer: [user] and [document#editor]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "exclusion base to reference other relations for same type",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define editor: [user]\n    define viewer: [document#editor] but not [user]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "exclusion target to reference other relations for same type",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define editor: [user]\n    define viewer: [user] but not [document#editor]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "union child to reference other relations for same type",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define editor: [user]\n    define viewer: [user] or [document#editor]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "type restriction cannot contains both wildcard and relation",
+      "dsl": "model\n  schema 1.1\ntype user\ntype department\n  relations\n    define member: [user]\ntype org\n  relations\n    define reader: [department, department#member:*]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "simple group reference to itself",
+      "dsl": "model\n  schema 1.1\ntype user\ntype group\n  relations\n    define group: [group]\n",
+      "validSyntax": true
+    },
+    {
+      "name": "group has entry point to itself",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n  relations\n    define viewer: [user]\ntype group\n  relations\n    define parent: [group, org]\n    define viewer: viewer from parent\n",
+      "validSyntax": true
+    },
+    {
+      "name": "intersection with directly related",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n  relations\n    define member: [user]\ntype group\n  relations\n    define parent: [group]\n    define writer: [user, org#member]\n    define viewer: [user, org#member] or writer\n",
+      "validSyntax": true
+    },
+    {
+      "name": "should allow directly assigned as last item",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n  relations\n    define member: [user]\ntype group\n  relations\n    define parent: [group]\n    define writer: [user, org#member]\n    define viewer: [user, org#member] or writer\n",
+      "validSyntax": true
+    },
+    {
+      "name": "union with directly related",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n  relations\n    define member: [user]\ntype group\n  relations\n    define parent: [group]\n    define writer: [user, org#member]\n    define viewer: [user, org#member] and writer\n",
+      "validSyntax": true
+    },
+    {
+      "name": "union allow directly assigned as last item",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n  relations\n    define member: [user]\ntype group\n  relations\n    define parent: [group]\n    define writer: [user, org#member]\n    define viewer: [user, org#member] and writer\n",
+      "validSyntax": true
+    },
+    {
+      "name": "but not with directly linked",
+      "dsl": "model\n  schema 1.1\ntype user\ntype docs\n  relations\n    define blocked: [user]\n    define can_view: [user] but not blocked\n",
+      "validSyntax": true
+    },
+    {
+      "name": "intersection with directly related and has spaces and blank lines",
+      "dsl": "model\n  schema 1.1\ntype user\ntype org\n\n  relations\n    define member: [user]\n\ntype group\n  relations\n    define parent: [group]\n    define writer: [user, org#member]\n    define viewer:    [   user,    org#member   ]       or    writer\n",
+      "validSyntax": true
+    },
+    {
+      "name": "model 1.1 tuple to userset",
+      "dsl": "model\n  schema 1.1\ntype folder\n  relations\n    define viewer: [user]\n\ntype document\n  relations\n    define parent: [folder]\n    define viewer: [user] or viewer from parent\ntype user\n",
+      "validSyntax": true
+    },
+    {
+      "name": "model 1.1 allow TTU with relations as long as 1 child has such relation",
+      "dsl": "model\n  schema 1.1\ntype final\n  relations\n    define children: [child1, child2]\n    define has_assigned: u1 from children or u2 from children\ntype child1\n  relations\n    define role: [user]\n    define u1: role\ntype child2\n  relations\n    define role: [user]\n    define u2: role\ntype user\n",
+      "validSyntax": true
+    },
+    {
+      "name": "model 1.1 wildcard restricted type",
+      "dsl": "model\n  schema 1.1\ntype folder\n  relations\n    define viewer: [user, user:*]\n\ntype user\n",
+      "validSyntax": true
+    },
+    {
+      "name": "model 1.1 wildcard restricted type in the middle",
+      "dsl": "model\n  schema 1.1\ntype folder\n  relations\n    define viewer: [user, user:*, group]\n\ntype user\ntype group\n",
+      "validSyntax": true
+    },
+    {
+      "name": "model 1.1 with spacing in allowed type",
+      "dsl": "model\n  schema 1.1\ntype folder\n  relations\n    define viewer: [  user  , user:*  , group  ]\n\ntype user\ntype group\n",
+      "validSyntax": true
+    },
+    {
+      "name": "union does not require all child to have entry",
+      "dsl": "model\n  schema 1.1\ntype user\ntype doc\n  relations\n    define admin: [user]\n    define action1: admin or action2 or action3\n    define action2: admin or action3 or action1\n    define action3: admin or action1 or action2\n",
+      "validSyntax": true
+    },
+    {
+      "name": "union does not require all child to have entry even for intersection child",
+      "dsl": "model\n  schema 1.1\ntype user\ntype docs\n  relations\n    define admin: [user]\n    define union1: admin or union2\n    define union2: admin or union1\n    define intersection1: union1 and union2\n    define intersection2: union1 and union2\n",
+      "validSyntax": true
+    },
+    {
+      "name": "union does not require all child to have entry even for exclusion child",
+      "dsl": "model\n  schema 1.1\ntype user\ntype docs\n  relations\n    define admin: [user]\n    define union1: admin or union2\n    define union2: admin or union1\n    define exclusion1: admin but not union1\n    define exclusion2: admin but not union2\n",
+      "validSyntax": true
+    },
+    {
+      "name": "union child allow to reference itself in TTU",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define editor: [user]\n    define viewer: [document#viewer] or editor\n",
+      "validSyntax": true
+    },
+    {
+      "name": "mixture of relations from relations for same type",
+      "dsl": "model\n  schema 1.1\ntype user\n\ntype document\n  relations\n    define restricted: [user]\n    define editor: [user]\n    define viewer: [document#viewer] or editor\n    define can_view: viewer but not restricted\n    define can_view_actual: can_view\n",
+      "validSyntax": true
+    },
+    {
+      "name": "extraneous spaces and newlines should still work",
+      "dsl": "\nmodel\n   schema 1.1\n type user\n",
+      "validSyntax": true
+    },
+    {
+      "name": "unsupported parameter type map<map>",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(status: map<map>) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": false
+    },
+    {
+      "name": "unsupported parameter type list<map>",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(status: list<map>) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": false
+    },
+    {
+      "name": "unsupported parameter type map<list>",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(status: map<list>) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": false
+    },
+    {
+      "name": "unsupported parameter type list<list>",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(status: list<list>) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": false
+    },
+    {
+      "name": "parameter type list needs generic type",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(status: list) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": false
+    },
+    {
+      "name": "parameter type map needs generic type",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(status: map) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": false
+    },
+    {
+      "name": "having no parameter name should fail",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(string) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": false
+    },
+    {
+      "name": "condition names cannot be duplicated",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(status: string) {\n  status != \"deleted\"\n}\ncondition is_not_deleted(status: string) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": true,
+      "semanticErrors": [
+        "condition 'is_not_deleted' is already defined in the model"
+      ]
+    },
+    {
+      "name": "parameter names cannot be duplicated",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define viewer: [user with is_not_deleted]\ncondition is_not_deleted(status: string, status: string) {\n  status != \"deleted\"\n}\n",
+      "validSyntax": true,
+      "semanticErrors": [
+        "parameter 'status' is already defined in the condition 'is_not_deleted'"
+      ]
+    },
+    {
+      "name": "a model with a valid condition and type restrictions",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define follower: [user, user:*, user#follower, user with is_not_hidden, user:* with is_not_hidden, user#follower with is_not_hidden]\ncondition is_not_hidden(status: string) {\n  status != \"hidden\"\n}\n",
+      "validSyntax": true
+    },
+    {
+      "name": "a valid model with multiple operators",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: [user]\n    define rel3: [user]\n    define rel4: [user]\n    define rel5: [user]\n    define rel6: [user]\n    define rel7: [user]\n    define rel8: [user]\n    define rel9: (rel1 or rel2 or rel3) but not ((rel4 and rel5 and rel6) but not (rel7 but not rel8))\n",
+      "validSyntax": true
+    },
+    {
+      "name": "a valid model with multiple operators x2",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: [user]\n    define rel3: [user]\n    define rel4: [user]\n    define rel5: [user]\n    define rel6: [user]\n    define rel7: [user]\n    define rel8: [user]\n    define rel9: ((rel1 or rel2 or rel3) but not ((rel4 and rel5 and rel6) but not (rel7 but not rel8)))\n",
+      "validSyntax": true
+    },
+    {
+      "name": "an invalid model with multiple type restriction instances in a relation definition",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define viewer: [user] or [user]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "an invalid model with confusing but not references",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: [user]\n    define rel3: [user]\n    define rel4: rel1 but not rel2 but not rel3\n",
+      "validSyntax": false
+    },
+    {
+      "name": "an invalid model with mixed operators",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: [user]\n    define rel3: [user]\n    define rel4: rel1 and rel2 or rel3\n",
+      "validSyntax": false
+    },
+    {
+      "name": "an invalid model x1",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: but not rel1\n",
+      "validSyntax": false
+    },
+    {
+      "name": "an invalid model x2",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: or rel1\n",
+      "validSyntax": false
+    },
+    {
+      "name": "an invalid model x3",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: and rel1\n",
+      "validSyntax": false
+    },
+    {
+      "name": "an invalid model with the type definition not in the first place x1",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: rel1 and [user]\n",
+      "validSyntax": false
+    },
+    {
+      "name": "an invalid model with the type definition not in the first place x2",
+      "dsl": "model\n  schema 1.1\ntype user\n  relations\n    define rel1: [user]\n    define rel2: [user]\n    define rel3: [user]\n    define relation: rel3 or ((rel1 and rel2) but not [user])\n",
+      "validSyntax": false
+    },
+    {
+      "name": "a valid model should not error",
+      "dsl": "model\n  schema 1.1\ntype user\ntype document\n  relations\n    define editor: [team#member]\ntype team\n  relations\n    define member: [user]\n",
+      "validSyntax": true
+    },
+    {
+      "name": "a valid model with comments should not have errors",
+      "dsl": "# comment 1\nmodel\n  # comment 2\n  schema 1.1\n     # comment 3\ntype user\n\n# comment 4\ntype document\n  # comment 5\n  relations\n  # comment 6\n    define editor: [team#member] # a comment\n\n  # comment 7\n    define viewer: [user] or editor # another comment\n\n  # comment 8\n  # comment 9\n\ntype team\n  relations\n    define member: [user]\n",
+      "validSyntax": true
+    },
+    {
+      "name": "a valid model with type names doesnt conflict with condition parameter types",
+      "dsl": "model\n  schema 1.1\ntype list\ntype map\n",
+      "validSyntax": true
+    },
+    {
+      "name": "does not allow module and model",
+      "dsl": "model\n  schema 1.1\nmodule foo\n\ntype user\n",
+      "validSyntax": false
+    },
+    {
+      "name": "does not allow extend in model",
+      "dsl": "model\n  schema 1.1\n\nextend type foo\n",
+      "validSyntax": true,
+      "semanticErrors": [
+        "extend can only be used in a modular model"
+      ]
+    },
+    {
+      "name": "a valid model with type names doesn't conflict with built-in keywords",
+      "dsl": "model\n  schema 1.1\ntype user\ntype model\n  relations\n    define model: [user]\n    define schema: [user]\n    define type: [user]\n    define relation: [user]\n    define module: [user]\n    define extend: [user]\n    define other: [model,schema,type,relation,module,extend]\n    define another: model or schema or type or relation or module or extend\ntype schema\n  relations\n    define model: [user]\n    define schema: [user]\n    define type: [user]\n    define relation: [user]\n    define module: [user]\n    define extend: [user]\n    define other: [model,schema,type,relation,module,extend]\n    define another: model or schema or type or relation or module or extend\ntype type\n  relations\n    define model: [user]\n    define schema: [user]\n    define type: [user]\n    define relation: [user]\n    define module: [user]\n    define extend: [user]\n    define other: [model,schema,type,relation,module,extend]\n    define another: model or schema or type or relation or module or extend\ntype relation\n  relations\n    define model: [user]\n    define schema: [user]\n    define type: [user]\n    define relation: [user]\n    define module: [user]\n    define extend: [user]\n    define other: [model,schema,type,relation,module,extend]\n    define another: model or schema or type or relation or module or extend\ntype module\n  relations\n    define model: [user]\n    define schema: [user]\n    define type: [user]\n    define relation: [user]\n    define module: [user]\n    define extend: [user]\n    define other: [model,schema,type,relation,module,extend]\n    define another: model or schema or type or relation or module or extend\ntype extend\n  relations\n    define model: [user]\n    define schema: [user]\n    define type: [user]\n    define relation: [user]\n    define module: [user]\n    define extend: [user]\n    define other: [model,schema,type,relation,module,extend]\n    define another: model or schema or type or relation or module or extend\n",
+      "validSyntax": true
+    },
+    {
+      "name": "disallows multiple extends for same type",
+      "dsl": "module foo\n\nextend type bar\n\nextend type bar\n\nextend type bar\n",
+      "validSyntax": true,
+      "semanticErrors": [
+        "'bar' is already extended in file.",
+        "'bar' is already extended in file."
+      ]
+    }
+  ]
+}

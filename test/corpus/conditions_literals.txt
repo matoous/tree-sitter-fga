@@ -1,0 +1,150 @@
+==================
+CEL strings and bytes
+==================
+
+model
+  schema 1.2
+
+condition literals(value: string) {
+  ["double", 'single', "escaped\n\"quote", r"\raw", R'\raw',
+   """multiple
+lines with " and "" quotes""", '''multiple
+lines with ' and '' quotes''', r"""raw\multi
+line""", R'''raw\multi
+line''', b"bytes", B'bytes', br"\bytes", BR'\bytes',
+   b"""byte
+lines""", B'''byte
+lines''', br"""raw\byte
+lines""", BR'''raw\byte
+lines''']
+}
+
+---
+
+(source_file
+  (model)
+  (schema
+    (version))
+  (condition_declaration
+    (identifier)
+    (param
+      (identifier)
+      (type_identifier
+        (simple_type_identifier)))
+    (condition_body
+      (bracket_condition
+        (string)
+        (string)
+        (string)
+        (string)
+        (string)
+        (string)
+        (string)
+        (string)
+        (string)
+        (bytes)
+        (bytes)
+        (bytes)
+        (bytes)
+        (bytes)
+        (bytes)
+        (bytes)
+        (bytes)))))
+
+==================
+CEL comments, subtraction and nested delimiters
+==================
+
+model
+  schema 1.2
+
+condition check(value: int, other: int) {
+  // Braces } and quotes " in a comment must not close the condition.
+  value-other > 0 && value in [1, 0x10, 2u, 0xFFU, 1.5, .5, 1e-2] &&
+  {"enabled": true, "fallback": null}["enabled"] ? (value > other) : false
+}
+
+---
+
+(source_file
+  (model)
+  (schema
+    (version))
+  (condition_declaration
+    (identifier)
+    (param
+      (identifier)
+      (type_identifier
+        (simple_type_identifier)))
+    (param
+      (identifier)
+      (type_identifier
+        (simple_type_identifier)))
+    (condition_body
+      (comment)
+      (identifier)
+      (condition_operator)
+      (identifier)
+      (condition_operator)
+      (int)
+      (condition_operator)
+      (identifier)
+      (condition_operator)
+      (bracket_condition
+        (int)
+        (int)
+        (uint)
+        (uint)
+        (float)
+        (float)
+        (float))
+      (condition_operator)
+      (braced_condition
+        (string)
+        (boolean)
+        (string)
+        (null))
+      (bracket_condition
+        (string))
+      (parenthesized_condition
+        (identifier)
+        (condition_operator)
+        (identifier))
+      (boolean))))
+
+==================
+Inline condition marker on type restrictions
+==================
+
+model
+  schema 1.2
+
+type document
+  relations
+    define viewer: [user with $expression, user:* with $expression, group#member with $expression]
+
+---
+
+(source_file
+  (model)
+  (schema
+    (version))
+  (type_declaration
+    (extended_identifier)
+    (relations
+      (definition
+        (extended_identifier)
+        (relation_def
+          (direct_relationship
+            (direct_relationship_item
+              (extended_identifier)
+              (conditional
+                (inline_condition)))
+            (direct_relationship_item
+              (all)
+              (conditional
+                (inline_condition)))
+            (direct_relationship_item
+              (relation_ref)
+              (conditional
+                (inline_condition)))))))))

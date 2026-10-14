@@ -1,13 +1,13 @@
-"""Tree sitter grammar for OpenFGA authorization schema files"""
-
-from importlib.resources import files as _files
+"""OpenFGA authorization schema grammar for tree-sitter"""
 
 from ._binding import language
 
 
 def _get_query(name, file):
+    from importlib.resources import files
+
     try:
-        query = _files(f"{__package__}") / file
+        query = files(f"{__package__}") / file
         globals()[name] = query.read_text()
     except FileNotFoundError:
         globals()[name] = None

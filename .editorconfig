@@ -2,12 +2,13 @@ root = true
 
 [*]
 charset = utf-8
+end_of_line = lf
 
-[*.{json,toml,yml,gyp}]
+[*.{json,toml,yml,yaml,gyp}]
 indent_style = space
 indent_size = 2
 
-[*.js]
+[*.{js,mjs}]
 indent_style = space
 indent_size = 2
 

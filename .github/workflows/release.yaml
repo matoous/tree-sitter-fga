@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   github:
-    uses: tree-sitter/workflows/.github/workflows/release.yml@main
+    uses: tree-sitter/workflows/.github/workflows/release.yml@10c66d66e558b37df92e2a8ec5321218a6547b04
     with:
-      generate: true
-      attestations: true
+      generate: false
+      abi-version: 15

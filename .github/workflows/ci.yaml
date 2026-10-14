@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/ci.yaml
       - Cargo.toml
+      - Cargo.lock
       - CMakeLists.txt
       - Makefile
       - Package.swift
@@ -14,7 +15,9 @@ on:
       - bindings/**
       - grammar.js
       - go.mod
+      - go.sum
       - package.json
+      - package-lock.json
       - pyproject.toml
       - queries/**
       - setup.py
@@ -25,6 +28,7 @@ on:
     paths:
       - .github/workflows/ci.yaml
       - Cargo.toml
+      - Cargo.lock
       - CMakeLists.txt
       - Makefile
       - Package.swift
@@ -32,7 +36,9 @@ on:
       - bindings/**
       - grammar.js
       - go.mod
+      - go.sum
       - package.json
+      - package-lock.json
       - pyproject.toml
       - queries/**
       - setup.py
@@ -58,14 +64,35 @@ jobs:
 
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@eeb902ac2f1be576edc296309872cf476a209b7f # v2
+        with:
+          tree-sitter-ref: v0.27.1
 
       - name: Run tests
         uses: tree-sitter/parser-test-action@05f6ce7c7e54603c45cd87ed926725dc870bcc63 # v3
         with:
-          node-version: 22
+          abi-version: 15
+          node-version: 24
           go-version: '1.23'
           test-rust: true
           test-node: true
           test-python: true
           test-go: true
           test-swift: true
+
+      - name: Test OpenFGA compatibility
+        run: npm run test:upstream
+
+      - name: Test Python wheel queries
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == macOS ]]; then
+            SDKROOT="$(xcrun --sdk macosx --show-sdk-path)"
+            export SDKROOT
+          fi
+          python -m pip wheel . --no-deps --wheel-dir "$RUNNER_TEMP/fga-wheels"
+          python -m pip install --force-reinstall --no-deps "$RUNNER_TEMP"/fga-wheels/*.whl
+          python -m unittest discover -v -s bindings/python/tests/wheel
+
+      - name: Verify generated files
+        shell: bash
+        run: git diff --exit-code -- src

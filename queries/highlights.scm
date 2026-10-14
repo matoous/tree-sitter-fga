@@ -8,6 +8,8 @@
 (conditional
   condition: (identifier) @function)
 
+(inline_condition) @constant.builtin
+
 (type_declaration
   name: (extended_identifier) @type)
 
@@ -59,7 +61,8 @@
 
 (direct_relationship ["[" "]"] @punctuation.bracket)
 (parenthesized_relation ["(" ")"] @punctuation.bracket)
-(condition_declaration ["(" ")" "{" "}"] @punctuation.bracket)
+(condition_declaration ["(" ")"] @punctuation.bracket)
+(condition_body ["{" "}"] @punctuation.bracket)
 (parenthesized_condition ["(" ")"] @punctuation.bracket)
 (bracket_condition ["[" "]"] @punctuation.bracket)
 (braced_condition ["{" "}"] @punctuation.bracket)

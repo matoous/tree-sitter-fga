@@ -1,7 +1,7 @@
 {
   "name": "tree-sitter-fga",
   "version": "0.1.0",
-  "description": "Tree sitter grammar for OpenFGA authorization schema files",
+  "description": "OpenFGA authorization schema grammar for tree-sitter",
   "main": "bindings/node",
   "types": "bindings/node",
   "author": "Matous Dzivjak",
@@ -18,8 +18,11 @@
     "binding.gyp",
     "prebuilds/**",
     "bindings/node/*",
-    "queries/*",
-    "src/**",
+    "queries/*.scm",
+    "src/*.c",
+    "src/*.h",
+    "src/*.json",
+    "src/tree_sitter/*.h",
     "*.wasm"
   ],
   "type": "module",
@@ -28,11 +31,13 @@
     "url": "https://github.com/matoous/tree-sitter-fga.git"
   },
   "scripts": {
-    "build": "tree-sitter generate && node-gyp build",
+    "generate": "tree-sitter generate --abi 15",
+    "build": "npm run generate && node-gyp rebuild",
     "lint": "eslint grammar.js",
     "lint:fix": "eslint --fix grammar.js",
-    "test": "tree-sitter test",
-    "test-windows": "tree-sitter test",
+    "test": "node --test bindings/node/*_test.js",
+    "test:parser": "tree-sitter test",
+    "test:upstream": "node --test test/upstream_test.js",
     "install": "node-gyp-build",
     "prebuildify": "prebuildify --napi --strip",
     "prestart": "tree-sitter build --wasm",
@@ -47,8 +52,8 @@
     "eslint-config-treesitter": "^1.0.2",
     "globals": "^17.4.0",
     "prebuildify": "^6.0.1",
-    "tree-sitter": "^0.25.0",
-    "tree-sitter-cli": "^0.26.7"
+    "tree-sitter": "0.25.1",
+    "tree-sitter-cli": "0.27.1"
   },
   "peerDependencies": {
     "tree-sitter": "^0.25.0"

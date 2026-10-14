@@ -17,7 +17,21 @@ See https://openfga.dev/docs/configuration-language for the configuration langua
 
 ## Development
 
-Install `tree-sitter-cli`, see [installation instructions](https://tree-sitter.github.io/tree-sitter/creating-parsers#installation).
+```sh
+npm ci
+npm run build
+npm run lint
+npm test
+npm run test:parser
+npm run test:upstream
+```
+
+`npm test` checks the Node binding and compiles both editor queries.
+`npm run test:parser` checks corpus trees and syntax highlighting;
+`npm run test:upstream` runs the vendored OpenFGA syntax suite.
+For incremental parsing checks, run `npx tree-sitter fuzz --iterations 100`.
+
+See [contribution guidelines](CONTRIBUTING.md) for upstream references, binding checks and the upgrade procedure.
 
 [ci]: https://img.shields.io/github/actions/workflow/status/matoous/tree-sitter-fga/ci.yaml?logo=github&label=CI
 [npm]: https://img.shields.io/npm/v/tree-sitter-fga?logo=npm

@@ -1,11 +1,4 @@
-/src/** linguist-vendored
-/examples/* linguist-vendored
-/bindings/** linguist-generated=true
+* text=auto eol=lf
 
-src/grammar.json -diff
-src/node-types.json -diff
-src/parser.c -diff
-
-# Zig bindings
-build.zig linguist-generated
-build.zig.zon linguist-generated
+/src/** linguist-generated
+/bindings/** linguist-generated

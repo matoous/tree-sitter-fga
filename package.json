@@ -44,7 +44,7 @@
     "start": "tree-sitter playground"
   },
   "dependencies": {
-    "node-addon-api": "^8.8.0",
+    "node-addon-api": "^8.9.2",
     "node-gyp-build": "^4.8.4"
   },
   "devDependencies": {

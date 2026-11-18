@@ -68,7 +68,7 @@ jobs:
           tree-sitter-ref: v0.27.1
 
       - name: Run tests
-        uses: tree-sitter/parser-test-action@05f6ce7c7e54603c45cd87ed926725dc870bcc63 # v3
+        uses: tree-sitter/parser-test-action@92e35c06b51ea26c80ffbd3cc8d9286d9110df17 # v3
         with:
           abi-version: 15
           node-version: 24
